@@ -1,0 +1,26 @@
+// Lista de palavras curtas e comuns para passphrases memoraveis.
+// A entropia exibida usa o tamanho real desta lista.
+export const WORDLIST = [
+  "agua", "areia", "arvore", "azul", "barco", "bola", "bravo", "cabo",
+  "cacto", "cafe", "caju", "calo", "campo", "canto", "carro", "casa",
+  "ceu", "chave", "chuva", "cidade", "claro", "cobra", "copo", "cor",
+  "corpo", "couro", "creme", "cubo", "dado", "dedo", "delta", "dente",
+  "disco", "doce", "dorso", "duna", "echo", "eixo", "elmo", "erro",
+  "fada", "faca", "faixa", "farol", "fava", "feira", "ferro", "festa",
+  "fibra", "ficha", "fila", "filme", "fixo", "flor", "fogo", "folha",
+  "forma", "forno", "fruta", "fumaca", "gancho", "garra", "gato", "gelo",
+  "gema", "gesso", "globo", "gota", "grade", "grao", "grupo", "guia",
+  "haste", "horta", "ilha", "iman", "indio", "jarra", "jato", "joia",
+  "junco", "lago", "lama", "lapis", "larva", "leite", "lenco", "leque",
+  "linha", "livro", "lobo", "lua", "luva", "maca", "malha", "mapa",
+  "mar", "massa", "mato", "mel", "mesa", "moeda", "monte", "mosca",
+  "nave", "neve", "ninho", "nota", "nuvem", "obra", "onda", "osso",
+  "ouro", "ovo", "palha", "pano", "papel", "pedra", "peixe", "pena",
+  "perna", "pesca", "pinha", "pista", "pluma", "ponte", "porta", "poste",
+  "pote", "praia", "prato", "prego", "pulso", "queijo", "raia", "raiz",
+  "ramo", "rato", "rede", "remo", "rio", "rocha", "roda", "rosa",
+  "sala", "salto", "selo", "serra", "sino", "soja", "sol", "sopa",
+  "tampa", "tatu", "teia", "telha", "tigre", "tinta", "torre", "trave",
+  "trem", "trigo", "tubo", "urso", "vaca", "vala", "vapor", "vara",
+  "vela", "vento", "verde", "vidro", "vinho", "voo", "zebra", "zinco",
+];

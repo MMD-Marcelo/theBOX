@@ -1,0 +1,23 @@
+{
+  "name": "thebox-downloader",
+  "version": "0.2.1",
+  "private": true,
+  "type": "module",
+  "description": "Motor local opcional do THEBOX: yt-dlp + ffmpeg, somente localhost.",
+  "bin": {
+    "thebox-downloader": "./src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "vitest run",
+    "build:sea": "node scripts/build-sea.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "postject": "^1.0.0-alpha.6",
+    "vitest": "^4.1.9"
+  },
+  "dependencies": {
+    "tesseract.js": "^7.0.0"
+  }
+}

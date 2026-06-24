@@ -1,0 +1,15 @@
+{
+  "main": "dist/bundle.cjs",
+  "output": "dist/sea-prep.blob",
+  "disableExperimentalSEAWarning": true,
+  "assets": {
+    "control-panel.ps1": "src/control-panel.ps1",
+    "tesseract-worker.cjs": "dist/tesseract-worker.cjs",
+    "tesseract-core-lstm.wasm": "node_modules/tesseract.js-core/tesseract-core-lstm.wasm",
+    "tesseract-core-simd-lstm.wasm": "node_modules/tesseract.js-core/tesseract-core-simd-lstm.wasm",
+    "tesseract-core-relaxedsimd-lstm.wasm": "node_modules/tesseract.js-core/tesseract-core-relaxedsimd-lstm.wasm",
+    "tesseract-core.wasm": "node_modules/tesseract.js-core/tesseract-core.wasm",
+    "tesseract-core-simd.wasm": "node_modules/tesseract.js-core/tesseract-core-simd.wasm",
+    "tesseract-core-relaxedsimd.wasm": "node_modules/tesseract.js-core/tesseract-core-relaxedsimd.wasm"
+  }
+}

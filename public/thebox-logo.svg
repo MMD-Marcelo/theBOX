@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="112" viewBox="0 0 420 112" role="img" aria-labelledby="title desc">
+  <title id="title">THEBOX</title>
+  <desc id="desc">Quadrado laranja ao lado do nome THEBOX em branco sobre fundo preto.</desc>
+  <rect width="420" height="112" fill="#0a0a0a"/>
+  <rect x="24" y="24" width="64" height="64" fill="#ff5a00"/>
+  <text
+    x="112"
+    y="68"
+    fill="#ffffff"
+    font-family="Oxygen Mono, Courier New, monospace"
+    font-size="36"
+    font-weight="400"
+    letter-spacing="0"
+  >THEBOX</text>
+</svg>
