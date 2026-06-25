@@ -1,6 +1,6 @@
 {
   "name": "thebox-downloader",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "type": "module",
   "description": "Motor local opcional do THEBOX: yt-dlp + ffmpeg, somente localhost.",
