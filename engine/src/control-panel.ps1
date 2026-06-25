@@ -3,7 +3,9 @@ param(
   [string]$AutoStart = "0",
   [string]$CanAutoStart = "1",
   [string]$StartHidden = "0",
-  [string]$Port = "7421"
+  [string]$Port = "7421",
+  [string]$RunValue = "THEBOX Engine",
+  [string]$StartupCommand = ""
 )
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
@@ -14,9 +16,33 @@ $gray = [Drawing.Color]::FromArgb(145, 145, 145)
 $script:isEnabled = $Enabled -eq "1"
 $script:allowExit = $false
 $script:initializing = $true
+$script:syncingAutoStart = $false
 function Send-Command([string]$value) {
   [Console]::Out.WriteLine($value)
   [Console]::Out.Flush()
+}
+$runKey = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
+# Le o estado real direto do registro (fonte da verdade, sem depender do motor).
+function Get-AutoStartState {
+  try {
+    $item = Get-ItemProperty -Path $runKey -Name $RunValue -ErrorAction Stop
+    return [bool]$item.$RunValue
+  } catch {
+    return $false
+  }
+}
+# Escreve/remove a entrada de inicializacao e devolve o estado resultante.
+function Set-AutoStartState([bool]$on) {
+  try {
+    if ($on) {
+      Set-ItemProperty -Path $runKey -Name $RunValue -Value $StartupCommand -Force -ErrorAction Stop
+    } else {
+      Remove-ItemProperty -Path $runKey -Name $RunValue -Force -ErrorAction SilentlyContinue
+    }
+  } catch {
+    # sem permissao/erro: o Get abaixo reflete o estado real
+  }
+  return Get-AutoStartState
 }
 $form = New-Object Windows.Forms.Form
 $form.Text = "THEBOX Engine"
@@ -53,19 +79,38 @@ $toggle.FlatAppearance.BorderColor = $orange
 $toggle.Font = New-Object Drawing.Font("Consolas", 11)
 $toggle.UseVisualStyleBackColor = $false
 $form.Controls.Add($toggle)
+# CheckBox em modo Botao: o estado (ligado/desligado) fica visivel mesmo no tema
+# escuro, ao contrario do tique padrao do FlatStyle que some no fundo preto.
 $startup = New-Object Windows.Forms.CheckBox
-$startup.Location = New-Object Drawing.Point(20, 145)
-$startup.Size = New-Object Drawing.Size(318, 28)
-$startup.Text = "Iniciar com o Windows"
-$startup.ForeColor = $white
+$startup.Location = New-Object Drawing.Point(20, 140)
+$startup.Size = New-Object Drawing.Size(318, 36)
+$startup.Appearance = [Windows.Forms.Appearance]::Button
+$startup.TextAlign = [Drawing.ContentAlignment]::MiddleCenter
 $startup.FlatStyle = [Windows.Forms.FlatStyle]::Flat
-$startup.Checked = $AutoStart -eq "1"
+$startup.FlatAppearance.BorderSize = 2
+$startup.FlatAppearance.BorderColor = $orange
+$startup.FlatAppearance.CheckedBackColor = $orange
+$startup.Font = New-Object Drawing.Font("Consolas", 10)
 $startup.Enabled = $CanAutoStart -eq "1"
-if (-not $startup.Enabled) {
-  $startup.Text = "Iniciar com o Windows (disponivel no .exe)"
-  $startup.ForeColor = $gray
-}
+$script:canAutoStart = $startup.Enabled
+# Estado inicial vem do registro (verdade), nao so do parametro.
+$startup.Checked = if ($script:canAutoStart) { Get-AutoStartState } else { $AutoStart -eq "1" }
 $form.Controls.Add($startup)
+function Update-AutoStartVisual {
+  if (-not $script:canAutoStart) {
+    $startup.Text = "Iniciar com o Windows (so no .exe)"
+    $startup.ForeColor = $gray
+    return
+  }
+  if ($startup.Checked) {
+    $startup.Text = "Iniciar com o Windows: LIGADO"
+    $startup.ForeColor = $black
+  } else {
+    $startup.Text = "Iniciar com o Windows: DESLIGADO"
+    $startup.ForeColor = $white
+    $startup.BackColor = $black
+  }
+}
 function Update-State {
   if ($script:isEnabled) {
     $status.Text = "LIGADO - 127.0.0.1:$Port"
@@ -87,8 +132,14 @@ $toggle.Add_Click({
   if ($script:isEnabled) { Send-Command "toggle:on" } else { Send-Command "toggle:off" }
 })
 $startup.Add_CheckedChanged({
-  if ($script:initializing -or -not $startup.Enabled) { return }
-  if ($startup.Checked) { Send-Command "autostart:on" } else { Send-Command "autostart:off" }
+  if ($script:initializing -or $script:syncingAutoStart -or -not $script:canAutoStart) { return }
+  $real = Set-AutoStartState $startup.Checked
+  if ($real -ne $startup.Checked) {
+    $script:syncingAutoStart = $true
+    $startup.Checked = $real
+    $script:syncingAutoStart = $false
+  }
+  Update-AutoStartVisual
 })
 $menu = New-Object Windows.Forms.ContextMenuStrip
 $openItem = $menu.Items.Add("Abrir")
@@ -128,5 +179,6 @@ $form.Add_Shown({
   }
 })
 Update-State
+Update-AutoStartVisual
 $script:initializing = $false
 [Windows.Forms.Application]::Run($form)

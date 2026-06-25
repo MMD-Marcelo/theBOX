@@ -165,6 +165,16 @@ async function main() {
     else if (command === "exit") await shutdown();
   }
 
+  // Se a inicializacao automatica estava ligada, reescreve a entrada apontando
+  // para o caminho atual do exe (auto-conserto caso tenha sido movido/rebaixado).
+  if (readAutoStart()) {
+    try {
+      setAutoStart(true);
+    } catch {
+      /* em dev (node) nao ha exe para registrar */
+    }
+  }
+
   panel = launchControlPanel({
     enabled: running,
     autoStart: readAutoStart(),

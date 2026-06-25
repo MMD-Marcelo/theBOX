@@ -81,6 +81,8 @@ export function launchControlPanel({
     "-CanAutoStart", isStandaloneExecutable() ? "1" : "0",
     "-StartHidden", startHidden ? "1" : "0",
     "-Port", String(port),
+    "-RunValue", RUN_VALUE,
+    "-StartupCommand", buildStartupCommand(),
   ], { stdio: ["ignore", "pipe", "pipe"] });
   createInterface({ input: child.stdout }).on("line", (line) => onCommand(line.trim()));
   child.stderr.on("data", (chunk) => {
