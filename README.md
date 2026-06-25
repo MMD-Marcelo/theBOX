@@ -50,7 +50,7 @@ The executable is simply the most convenient way I found to use them in my day-t
 
 Download the latest Windows build from the application or from [GitHub Releases](https://github.com/MMD-Marcelo/theBOX/releases/latest). Put it in whatever folder you intend to keep it, then run it. Closing the window sends it to the system tray instead of stopping it.
 
-The website detects the engine through **127.0.0.1**. There is no folder to select, token to paste or administrator permission involved. If you move the executable later, uncheck and check **Start with Windows** again so the saved path is updated.
+The website detects the engine through **127.0.0.1**. There is no folder to select, token to paste or administrator permission involved. If you move the executable later, just run it once — the saved **Start with Windows** path updates itself.
 
 If the engine is not running, the browser-only tools continue to work.
 

@@ -16,8 +16,9 @@ node src/index.js                 # pasta padrao: ~/Downloads/THEBOX
 node src/index.js --out D:/videos --port 7421
 ```
 
-Ao subir, ele imprime um **token**. Cole esse token no THEBOX (ferramenta
-Downloaders) para autorizar a comunicação.
+Ao subir, ele abre o THEBOX no navegador **já autorizado**: o token vai no
+fragmento da URL (`#thebox-token=...`), que nunca é enviado a nenhum servidor.
+Não há token para copiar à mão.
 
 ## API (127.0.0.1:7421)
 
@@ -29,12 +30,12 @@ Downloaders) para autorizar a comunicação.
 | `/direct` | POST | token | baixa um arquivo direto (burla CORS) |
 | `/convert` | POST | token | converte mídia com ffmpeg (corpo = arquivo) |
 | `/ocr` | POST | token | extrai texto de imagem com Tesseract (PT/EN/ES) |
-| `/linkcheck` | POST | token | crawl de links quebrados |
-| `/whois` | POST | token | WHOIS TCP porta 43 (referral IANA) |
-| `/images` | POST | token | lista imagens de uma página |
-| `/geoip` | POST | token | país por IPv4 (base CC0 local) |
+| `/file/:id` | GET | token | stream do arquivo concluído para o navegador salvar |
 | `/progress/:id` | GET (SSE) | token (query) | progresso em tempo real |
 | `/cancel/:id` | POST | token | cancela um job |
+
+Autorização: requisições com `Origin` na allowlist são aceitas sem token (o
+navegador não forja `Origin`); fora disso, exige o token.
 
 ## Binário único (Node SEA)
 
@@ -53,11 +54,6 @@ do SmartScreen); no macOS é preciso reassinar com `codesign`.
 
 Tags `engine-v*` acionam `.github/workflows/release-engine.yml`, que testa,
 compila e publica `thebox-downloader.exe` no GitHub Releases.
-
-## GeoIP
-
-País por IPv4 usando a base **CC0** `@ip-location-db/geo-whois-asn-country`
-(domínio público, sem conta/licença MaxMind). Cidade e ASN ficam fora do escopo.
 
 ## Segurança
 
