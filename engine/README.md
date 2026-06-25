@@ -7,8 +7,8 @@ navegador não consegue.
 
 ## Rodar
 
-Requer Node.js 20+. `ffmpeg` no PATH (ou em `engine/bin/`). O yt-dlp é baixado
-automaticamente no primeiro uso.
+Requer Node.js 20+. O yt-dlp e o ffmpeg são baixados automaticamente no primeiro
+uso (o ffmpeg só se ainda não estiver no PATH).
 
 ```bash
 cd engine
@@ -45,9 +45,11 @@ cd engine && npm install && npm run build:sea
 
 Gera um executável standalone (não precisa de Node instalado para rodar). O
 worker e os cores WASM do OCR ficam incorporados ao SEA e são extraídos para a
-pasta temporária durante a execução. O yt-dlp é baixado para `bin/` no primeiro
-uso; o FFmpeg precisa estar no PATH ou em `bin/`. No Windows o binário sai sem
-assinatura (aviso do SmartScreen); no macOS é preciso reassinar com `codesign`.
+pasta temporária durante a execução. O yt-dlp e o ffmpeg são baixados para `bin/`
+no primeiro uso (Windows/Linux; no macOS o ffmpeg deve estar no PATH, ex.: brew).
+Sem ffmpeg o downloader ainda funciona, mas cai para o melhor formato único
+(~720p) e não converte para mp3. No Windows o binário sai sem assinatura (aviso
+do SmartScreen); no macOS é preciso reassinar com `codesign`.
 
 Tags `engine-v*` acionam `.github/workflows/release-engine.yml`, que testa,
 compila e publica `thebox-downloader.exe` no GitHub Releases.

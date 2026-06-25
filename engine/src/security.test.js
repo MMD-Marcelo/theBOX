@@ -74,4 +74,8 @@ describe("corsHeaders", () => {
     const headers = corsHeaders("https://evil.com", allow);
     expect(headers["Access-Control-Allow-Origin"]).toBeUndefined();
   });
+  it("expoe Content-Disposition para o navegador ler o nome do arquivo", () => {
+    const headers = corsHeaders("https://thebox.tche.studio", allow);
+    expect(headers["Access-Control-Expose-Headers"]).toMatch(/content-disposition/i);
+  });
 });

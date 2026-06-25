@@ -62,7 +62,7 @@ export function createRegistry({ spawnImpl, ytdlpPath, ffmpegPath, outDir, direc
     } catch {
       /* tests/fs */
     }
-    const args = buildDownloadArgs({ url, formatId, output, outDir: jobDir });
+    const args = buildDownloadArgs({ url, formatId, output, outDir: jobDir, hasFfmpeg: Boolean(ffmpegPath) });
     const proc = spawnImpl(ytdlpPath, args);
     job.proc = proc;
 

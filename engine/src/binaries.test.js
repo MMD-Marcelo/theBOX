@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { ytdlpDownloadUrl, binaryName } from "./binaries.js";
+import { ytdlpDownloadUrl, ffmpegDownloadUrl, binaryName } from "./binaries.js";
 
 describe("binaryName", () => {
   it("adiciona .exe no windows", () => {
@@ -24,5 +24,20 @@ describe("ytdlpDownloadUrl", () => {
   });
   it("aponta para releases do yt-dlp", () => {
     expect(ytdlpDownloadUrl("linux")).toContain("github.com/yt-dlp/yt-dlp/releases");
+  });
+});
+
+describe("ffmpegDownloadUrl", () => {
+  it("windows usa zip win64", () => {
+    expect(ffmpegDownloadUrl("win32")).toMatch(/win64-gpl\.zip$/);
+  });
+  it("linux usa tar.xz", () => {
+    expect(ffmpegDownloadUrl("linux")).toMatch(/linux64-gpl\.tar\.xz$/);
+  });
+  it("macos nao tem build automatico (null)", () => {
+    expect(ffmpegDownloadUrl("darwin")).toBe(null);
+  });
+  it("usa os builds do yt-dlp/FFmpeg-Builds", () => {
+    expect(ffmpegDownloadUrl("win32")).toContain("github.com/yt-dlp/FFmpeg-Builds/releases");
   });
 });

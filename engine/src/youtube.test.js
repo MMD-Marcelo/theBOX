@@ -63,16 +63,29 @@ describe("parseProgress", () => {
 });
 
 describe("buildDownloadArgs", () => {
-  it("mp4: seleciona formato + bestaudio e faz merge", () => {
-    const args = buildDownloadArgs({ url: "U", formatId: "137", output: "mp4", outDir: "/out" });
+  it("mp4 com ffmpeg: seleciona formato + bestaudio e faz merge", () => {
+    const args = buildDownloadArgs({ url: "U", formatId: "137", output: "mp4", outDir: "/out", hasFfmpeg: true });
     expect(args).toContain("-f");
     expect(args.join(" ")).toContain("137+bestaudio");
     expect(args.join(" ")).toContain("--merge-output-format");
     expect(args).toContain("U");
   });
-  it("mp3: extrai audio", () => {
-    const args = buildDownloadArgs({ url: "U", output: "mp3", outDir: "/out" });
+  it("mp4 sem ffmpeg: usa formato progressivo (arquivo unico, sem merge)", () => {
+    const args = buildDownloadArgs({ url: "U", formatId: "137", output: "mp4", outDir: "/out", hasFfmpeg: false });
+    expect(args.join(" ")).not.toContain("+bestaudio");
+    expect(args.join(" ")).not.toContain("--merge-output-format");
+    // formato com video+audio num arquivo so
+    const fIdx = args.indexOf("-f");
+    expect(args[fIdx + 1]).toMatch(/best\[/);
+  });
+  it("mp3 com ffmpeg: extrai audio", () => {
+    const args = buildDownloadArgs({ url: "U", output: "mp3", outDir: "/out", hasFfmpeg: true });
     expect(args).toContain("-x");
     expect(args.join(" ")).toContain("mp3");
+  });
+  it("mp3 sem ffmpeg: baixa o melhor audio como esta (sem -x)", () => {
+    const args = buildDownloadArgs({ url: "U", output: "mp3", outDir: "/out", hasFfmpeg: false });
+    expect(args).not.toContain("-x");
+    expect(args.join(" ")).toContain("bestaudio");
   });
 });

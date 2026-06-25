@@ -10,7 +10,7 @@ import { pipeline } from "node:stream/promises";
 import { promisify } from "node:util";
 import { parseArgs, ALLOWED_ORIGINS } from "./config.js";
 import { generateToken } from "./security.js";
-import { ensureYtdlp, checkPresence, resolvePaths } from "./binaries.js";
+import { ensureYtdlp, ensureFfmpeg, checkPresence, resolvePaths } from "./binaries.js";
 import { parseFormats } from "./youtube.js";
 import { downloadDirect } from "./direct.js";
 import { ocrImage } from "./ocr.js";
@@ -36,6 +36,7 @@ async function main() {
 
   console.log("THEbox Downloader — preparando binarios...");
   await ensureYtdlp().catch((e) => console.warn("Aviso: nao consegui baixar yt-dlp:", e.message));
+  await ensureFfmpeg().catch((e) => console.warn("Aviso: nao consegui baixar ffmpeg:", e.message));
 
   const { ytdlp, ffmpeg } = resolvePaths();
   const presence = checkPresence();

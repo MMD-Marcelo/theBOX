@@ -42,12 +42,23 @@ export function parseProgress(line) {
   };
 }
 
-export function buildDownloadArgs({ url, formatId, output, outDir }) {
+export function buildDownloadArgs({ url, formatId, output, outDir, hasFfmpeg = true }) {
   const template = `${outDir}/%(title)s.%(ext)s`;
   const base = ["--newline", "--no-playlist", "-o", template];
+
   if (output === "mp3") {
+    // Converter para mp3 exige ffmpeg. Sem ele, baixa o melhor audio como esta
+    // (m4a/webm) para ao menos entregar um arquivo de audio tocavel.
+    if (!hasFfmpeg) return [...base, "-f", "bestaudio/best", url];
     return [...base, "-x", "--audio-format", "mp3", "--audio-quality", "0", url];
   }
+
+  // Sem ffmpeg nao da para juntar video+audio separados. Cai para o melhor
+  // formato progressivo (video+audio num unico arquivo, ~720p no YouTube).
+  if (!hasFfmpeg) {
+    return [...base, "-f", "best[acodec!=none][vcodec!=none]/best", url];
+  }
+
   const format = formatId ? `${formatId}+bestaudio/best` : "bestvideo+bestaudio/best";
   return [...base, "-f", format, "--merge-output-format", "mp4", url];
 }

@@ -31,6 +31,9 @@ export function corsHeaders(origin, allowlist) {
   const headers = {
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Authorization, Content-Type",
+    // Sem isto o navegador (cross-origin) nao consegue ler o nome do arquivo,
+    // e o download sai com nome generico (download-<id>).
+    "Access-Control-Expose-Headers": "Content-Disposition",
     "Access-Control-Allow-Private-Network": "true",
     Vary: "Origin",
   };
