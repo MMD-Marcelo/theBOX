@@ -29,6 +29,7 @@ export function readAutoStart({ platform = process.platform, execFileSyncImpl = 
     const output = execFileSyncImpl("reg.exe", ["query", RUN_KEY, "/v", RUN_VALUE], {
       encoding: "utf8",
       windowsHide: true,
+      stdio: ["ignore", "pipe", "ignore"],
     });
     return output.includes(RUN_VALUE);
   } catch {

@@ -7,7 +7,7 @@ import DropZone from "../components/DropZone.jsx";
 // Assets auto-hospedados em public/imgly (nada vai a servidor remoto).
 // Modelo quint8 (42 MB) + runtime CPU, fixados para manter o THEBOX 100% local.
 const bgRemovalConfig = {
-  publicPath: `${import.meta.env.BASE_URL}imgly/`,
+  publicPath: new URL(`${import.meta.env.BASE_URL}imgly/`, window.location.href).href,
   model: "isnet_quint8",
   device: "cpu",
 };
